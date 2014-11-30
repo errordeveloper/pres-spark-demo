@@ -5,7 +5,11 @@
         [org.apache.hadoop/hadoop-client "2.5.0"]
         [org.elasticsearch/elasticsearch-spark_2.10 "2.1.0.Beta3"]
         [com.fasterxml.jackson.core/jackson-databind "2.4.3"]
+	[junit "4.11"]
 
-        [org.clojure/clojure "{{clojure-version}}"]
+        ;;[org.clojure/clojure "{{clojure-version}}"]
     ]
-  :main com.holdenkarau.esspark.ReIndexTweets)
+  :java-source-paths ["src/main/java"]
+  :resource-paths ["src/main/resources"]
+  :profiles { :uberjar {:aot :all} }
+  :main com.seigneurin.spark.IndexTweets)
