@@ -31,7 +31,7 @@ public class IndexTweets {
         ObjectMapper mapper = new ObjectMapper();
 
         // Language Detection
-        DetectorFactory.loadProfile(ClassLoaderUtil.getResourceFile("resources/profiles"));
+        DetectorFactory.loadProfile(ClassLoaderUtil.getResourceFile("profiles"));
 
         // Spark
         SparkConf sparkConf = new SparkConf()
