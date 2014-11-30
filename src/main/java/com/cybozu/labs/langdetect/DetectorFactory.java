@@ -106,11 +106,14 @@ public class DetectorFactory {
             
         for (String json: json_profiles) {
             try {
+                //System.err.println("Loading profile #" + index + " data[" + json +"]");
                 LangProfile profile = mapper.readValue(json, LangProfile.class);
                 addProfile(profile, index, langsize);
                 ++index;
+            } catch (JsonParseException | JsonMappingException e) {
+                throw new LangDetectException(ErrorCode.FormatError, "profile format error in - " + e.getMessage());
             } catch (IOException e) {
-                throw new LangDetectException(ErrorCode.FormatError, "profile format error");
+                throw new LangDetectException(ErrorCode.FormatError, "I/O error - " + e.getMessage());
             }
         }
     }

@@ -18,10 +18,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seigneurin.spark.pojo.Tweet;
 
 import jodd.util.ClassLoaderUtil;
+import java.util.List;
+import java.util.Vector;
+import jodd.io.FileUtil;
+import jodd.io.findfile.ClassScanner;
+import java.net.URL;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+//import org.apache.commons.io.IOUtils;
+import jodd.util.StringPool;
+import jodd.util.StringUtil;
+import jodd.core.JoddCore;
+
 
 public class IndexTweets {
 
     public static void main(String[] args) throws Exception {
+        System.err.println("Entered main...");
         // Twitter4J
         // IMPORTANT: ajuster vos clés d'API dans twitter4J.properties
         Configuration twitterConf = ConfigurationContext.getInstance();
@@ -31,7 +46,36 @@ public class IndexTweets {
         ObjectMapper mapper = new ObjectMapper();
 
         // Language Detection
-        DetectorFactory.loadProfile(ClassLoaderUtil.getResourceAsStream("profiles"));
+        List<String> profiles = new Vector<String>();
+        ClassScanner scanner = new ClassScanner() {
+            @Override
+            protected void onEntry(EntryData entryData) throws Exception {
+                //String encoding = JoddCore.encoding;
+                if (StringUtil.startsWithIgnoreCase(entryData.getName(), "/profiles/") 
+                    && !StringUtil.endsWithIgnoreCase(entryData.getName(), "/profiles/")) {
+                    //encoding = StringPool.ISO_8859_1;
+                    System.err.println("Found profile: " + entryData.getName());
+                    profiles.add(
+                        FileUtil.readUTFString(
+                            entryData.openInputStream()
+                        )
+                    );
+                }
+            }
+        };
+        scanner.setIncludeResources(true);
+        scanner.setIgnoreException(true);
+        //scanner.setExcludeAllEntries(true);
+        //scanner.setIncludedEntries("/profiles/*");
+        //scanner.scanDefaultClasspath();
+
+        scanner.scan(
+            FileUtil.toContainerFile(
+              ClassLoaderUtil.getResourceUrl("/profiles/")
+            )
+        );
+        System.err.println("Loading profiles...");
+        DetectorFactory.loadProfile(profiles);
 
         // Spark
         SparkConf sparkConf = new SparkConf()
