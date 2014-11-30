@@ -6,6 +6,7 @@
         [org.elasticsearch/elasticsearch-spark_2.10 "2.1.0.Beta3"]
         [com.fasterxml.jackson.core/jackson-databind "2.4.3"]
 	[junit "4.11"]
+        [org.jodd/jodd "3.1.1"]
 
         ;;[org.clojure/clojure "{{clojure-version}}"]
     ]

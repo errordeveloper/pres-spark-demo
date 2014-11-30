@@ -17,6 +17,8 @@ import com.cybozu.labs.langdetect.DetectorFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seigneurin.spark.pojo.Tweet;
 
+import jodd.util.ClassLoaderUtil;
+
 public class IndexTweets {
 
     public static void main(String[] args) throws Exception {
@@ -29,7 +31,7 @@ public class IndexTweets {
         ObjectMapper mapper = new ObjectMapper();
 
         // Language Detection
-        DetectorFactory.loadProfile("resources/profiles");
+        DetectorFactory.loadProfile(ClassLoaderUtil.getResourceFile("resources/profiles"));
 
         // Spark
         SparkConf sparkConf = new SparkConf()
