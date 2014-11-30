@@ -29,7 +29,7 @@ public class IndexTweets {
         ObjectMapper mapper = new ObjectMapper();
 
         // Language Detection
-        DetectorFactory.loadProfile("src/main/resources/profiles");
+        DetectorFactory.loadProfile("resources/profiles");
 
         // Spark
         SparkConf sparkConf = new SparkConf()
