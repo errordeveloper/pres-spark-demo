@@ -41,6 +41,7 @@ public class IndexTweets {
     public static void main(String[] args) throws Exception {
         System.err.println("Entered main...");
         // Twitter4J
+        /*
         StatusListener listener = new StatusListener() {
             @Override
 	    public void onStatus(Status status) {
@@ -67,6 +68,7 @@ public class IndexTweets {
                 Thread.sleep(25);
         }
         twitterStream.shutdown(); //??
+        */
 
         // IMPORTANT: ajuster vos clés d'API dans twitter4J.properties
         Configuration twitterConf = ConfigurationContext.getInstance();
