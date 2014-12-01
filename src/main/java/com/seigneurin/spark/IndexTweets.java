@@ -36,18 +36,24 @@ import jodd.core.JoddCore;
 
 public class IndexTweets {
 
-    @volatile static int counter = 0;
+    volatile static int counter = 0;
 
     public static void main(String[] args) throws Exception {
         System.err.println("Entered main...");
         // Twitter4J
-        StatusListener listener = new StatusListener(){
-            public void onStatus(Status status) {
+        StatusListener listener = new StatusListener() {
+            @Override
+	    public void onStatus(Status status) {
                 counter++;
                 System.out.println(status.getUser().getName() + " : " + status.getText());
             }
+            @Override
             public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {}
+	    @Override public void onStallWarning(StallWarning warning) {}
+	    @Override public void onScrubGeo(long i,long f) {}
+            @Override
             public void onTrackLimitationNotice(int numberOfLimitedStatuses) {}
+            @Override
             public void onException(Exception ex) {
                 ex.printStackTrace();
             }
@@ -57,7 +63,7 @@ public class IndexTweets {
         // sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
         twitterStream.sample();
 
-        while (count < 10) {
+        while (counter < 10) {
                 Thread.sleep(25);
         }
         twitterStream.shutdown(); //??
