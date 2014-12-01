@@ -96,7 +96,7 @@ public class IndexTweets {
 
                     tweets.collect().stream().forEach(t -> System.out.println(t));
                     JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
-                    System.out.println("Saving tweets - count:"
+                    System.out.println("Saving tweets - count:");
                     System.out.println(tweets.count());
                     return null;
                 });
