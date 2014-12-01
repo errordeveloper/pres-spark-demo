@@ -7,6 +7,7 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.twitter.TwitterUtils;
 import org.elasticsearch.spark.rdd.api.java.JavaEsSpark;
 
+import twitter4j.*;
 import twitter4j.auth.Authorization;
 import twitter4j.auth.AuthorizationFactory;
 import twitter4j.conf.Configuration;
@@ -35,9 +36,32 @@ import jodd.core.JoddCore;
 
 public class IndexTweets {
 
+    @volatile static int counter = 0;
+
     public static void main(String[] args) throws Exception {
         System.err.println("Entered main...");
         // Twitter4J
+        StatusListener listener = new StatusListener(){
+            public void onStatus(Status status) {
+                counter++;
+                System.out.println(status.getUser().getName() + " : " + status.getText());
+            }
+            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {}
+            public void onTrackLimitationNotice(int numberOfLimitedStatuses) {}
+            public void onException(Exception ex) {
+                ex.printStackTrace();
+            }
+        };
+        TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
+        twitterStream.addListener(listener);
+        // sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
+        twitterStream.sample();
+
+        while (count < 10) {
+                Thread.sleep(25);
+        }
+        twitterStream.shutdown(); //??
+
         // IMPORTANT: ajuster vos clés d'API dans twitter4J.properties
         Configuration twitterConf = ConfigurationContext.getInstance();
         Authorization twitterAuth = AuthorizationFactory.getInstance(twitterConf);
