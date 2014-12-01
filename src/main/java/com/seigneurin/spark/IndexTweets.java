@@ -114,7 +114,7 @@ public class IndexTweets {
                 .setAppName("Tweets #CyberMonday")
                 .set("spark.serializer", KryoSerializer.class.getName())
                 .set("es.nodes", "elasticsearch-aws-3.weave.local:9200")
-                .set("es.index.auto.create", "true");
+                //.set("es.index.auto.create", "true");
         JavaStreamingContext sc = new JavaStreamingContext(sparkConf, new Duration(5000));
 
         String[] filters = { "#CyberMonday" };
@@ -128,7 +128,7 @@ public class IndexTweets {
                     // DO NOT CALL tweets.count()
                     // BANG. https://issues.apache.org/jira/browse/SPARK-4040
                     tweets.collect().stream().forEach(t -> System.out.println(t));
-                    //JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
+                    JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
                     return null;
                 });
 
