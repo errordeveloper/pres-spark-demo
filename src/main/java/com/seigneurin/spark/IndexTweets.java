@@ -79,14 +79,14 @@ public class IndexTweets {
 
         // Spark
         SparkConf sparkConf = new SparkConf()
-                .setAppName("Tweets Android")
-                .setMaster("spark://spark-master-gce.weave.local:7077")
+                .setAppName("Tweets #CyberMonday")
+                .setMaster("local[2]")
                 .set("spark.serializer", KryoSerializer.class.getName())
                 .set("es.nodes", "elasticsearch-aws-3.weave.local:9200")
                 .set("es.index.auto.create", "true");
         JavaStreamingContext sc = new JavaStreamingContext(sparkConf, new Duration(5000));
 
-        String[] filters = { "#Android" };
+        String[] filters = { "#CyberMonday" };
         TwitterUtils.createStream(sc, twitterAuth, filters)
                 .map(s -> new Tweet(s.getUser().getName(), s.getText(), s.getCreatedAt(), detectLanguage(s.getText())))
                 .map(t -> mapper.writeValueAsString(t))
