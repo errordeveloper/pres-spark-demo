@@ -119,23 +119,15 @@ public class IndexTweets {
         TwitterUtils.createStream(sc, twitterAuth, filters)
                 //.map(s -> new Tweet(s.getUser().getName(), s.getText(), s.getCreatedAt(), detectLanguage(s.getText())))
                 //.map(t -> mapper.writeValueAsString(t))
-                .foreachRDD(new Function2<JavaPairRDD<String, Integer>, Time, Void>() {
+                .foreachRDD(tweets -> {
                     // https://issues.apache.org/jira/browse/SPARK-4560
                     // tweets.foreach(t -> System.out.println(t));
-                    @Override
-                    public Void call(JavaPairRDD<String, Integer> rdd, Time time) throws IOException {
-                      String counts = "Counts at time " + time + " " + rdd.collect();
-                      System.out.println(counts);
-                      System.out.println("Appending to " + outputFile.getAbsolutePath());
-                      Files.append(counts + "\n", outputFile, Charset.defaultCharset());
-                      return null;
-                    }
 
-                    //System.out.println("Saving tweets - count:");
-                    //System.out.println(tweets.count());
-                    ////tweets.collect().stream().forEach(t -> System.out.println(t));
-                    ////JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
-                    //return null;
+                    System.out.println("Saving tweets - count:");
+                    System.out.println(tweets.count());
+                    //tweets.collect().stream().forEach(t -> System.out.println(t));
+                    //JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
+                    return null;
                 });
 
         sc.start();
