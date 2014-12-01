@@ -123,9 +123,9 @@ public class IndexTweets {
                     // https://issues.apache.org/jira/browse/SPARK-4560
                     // tweets.foreach(t -> System.out.println(t));
 
-                    System.out.println("Saving tweets - count:");
-                    System.out.println(tweets.count());
-                    //tweets.collect().stream().forEach(t -> System.out.println(t));
+                    // DO NOT CALL tweets.count()
+                    // BANG. https://issues.apache.org/jira/browse/SPARK-4040
+                    tweets.collect().stream().forEach(t -> System.out.println(t));
                     //JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
                     return null;
                 });
