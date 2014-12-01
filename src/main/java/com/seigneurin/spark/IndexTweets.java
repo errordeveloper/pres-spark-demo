@@ -115,7 +115,7 @@ public class IndexTweets {
                 .set("es.index.auto.create", "true");
         JavaStreamingContext sc = new JavaStreamingContext(sparkConf, new Duration(5000));
 
-        String[] filters = { };
+        String[] filters = { "#CyberMonday" };
         TwitterUtils.createStream(sc, twitterAuth, filters)
                 //.map(s -> new Tweet(s.getUser().getName(), s.getText(), s.getCreatedAt(), detectLanguage(s.getText())))
                 //.map(t -> mapper.writeValueAsString(t))
