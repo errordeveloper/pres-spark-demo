@@ -79,14 +79,14 @@ public class IndexTweets {
 
         // Spark
         SparkConf sparkConf = new SparkConf()
-                .setAppName("Tweets Docker")
+                .setAppName("Tweets Android")
                 .setMaster("spark://spark-master-gce.weave.local:7077")
                 .set("spark.serializer", KryoSerializer.class.getName())
                 .set("es.nodes", "elasticsearch-aws-3.weave.local:9200")
                 .set("es.index.auto.create", "true");
         JavaStreamingContext sc = new JavaStreamingContext(sparkConf, new Duration(5000));
 
-        String[] filters = { "#Docker" };
+        String[] filters = { "#Android" };
         TwitterUtils.createStream(sc, twitterAuth, filters)
                 .map(s -> new Tweet(s.getUser().getName(), s.getText(), s.getCreatedAt(), detectLanguage(s.getText())))
                 .map(t -> mapper.writeValueAsString(t))
@@ -96,6 +96,7 @@ public class IndexTweets {
 
                     tweets.collect().stream().forEach(t -> System.out.println(t));
                     JavaEsSpark.saveJsonToEs(tweets, "spark/tweets");
+                    System.out.println("Saving tweets - count:", tweets.count());
                     return null;
                 });
 
