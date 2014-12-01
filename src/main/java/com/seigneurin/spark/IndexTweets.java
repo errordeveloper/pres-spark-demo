@@ -80,7 +80,6 @@ public class IndexTweets {
         // Spark
         SparkConf sparkConf = new SparkConf()
                 .setAppName("Tweets #CyberMonday")
-                .setMaster("local[2]")
                 .set("spark.serializer", KryoSerializer.class.getName())
                 .set("es.nodes", "elasticsearch-aws-3.weave.local:9200")
                 .set("es.index.auto.create", "true");
