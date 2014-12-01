@@ -18,6 +18,11 @@ import com.cybozu.labs.langdetect.DetectorFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seigneurin.spark.pojo.Tweet;
 
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.PairFunction;
+
 import jodd.util.ClassLoaderUtil;
 import java.util.List;
 import java.util.Vector;
